@@ -1,12 +1,13 @@
-# Ignore data
-data/
+# Ignore large/raw data
+data/raw/
+data/interim/
 
-# Python
+# Ignore cache and environment files
 __pycache__/
-*.py[cod]
-*.ipynb_checkpoints
-
-# Virtual environments
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+.env
 .venv/
-env/
 venv/

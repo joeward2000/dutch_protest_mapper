@@ -1,9 +1,9 @@
-# src/data_load.py
-
 import os
 import pandas as pd
 
-RAW_DATA_PATH = "data/raw/protests_nl_2020_2024.csv"
+# Determine the repo root (one level up from src/)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RAW_DATA_PATH = os.path.join(BASE_DIR, "data", "raw", "protests_nl_2020_2024.csv")
 
 def load_raw_data(path=RAW_DATA_PATH):
     """Load the raw ACLED CSV file."""
