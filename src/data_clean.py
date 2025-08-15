@@ -16,13 +16,9 @@ def clean_data(df):
         "year",
         "time_precision",
         "sub_event_type",
-        "interaction",
         "admin1",
-        "location",
         "geo_precision",
-        "source",
         "notes",
-        "tags",
         "longitude",
         "latitude"
     ]

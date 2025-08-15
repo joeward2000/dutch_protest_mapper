@@ -15,7 +15,7 @@ st.set_page_config(
 @st.cache_data
 def load_protest_data():
     """Load and prepare protest data."""
-    data_path = "./data/processed/protests_nl_cleaned.csv"
+    data_path = "./data/processed/protests_nl_cleaned_v2.csv"
     
     if not os.path.exists(data_path):
         st.error(f"Data file not found at {data_path}")
@@ -25,7 +25,7 @@ def load_protest_data():
         df = pd.read_csv(data_path)
         
         # Ensure required columns exist
-        required_cols = ['longitude', 'latitude', 'year', 'event_type', 'province']
+        required_cols = ['longitude', 'latitude', 'year', 'event_type', 'province', 'cluster_theme']
         missing_cols = [col for col in required_cols if col not in df.columns]
         if missing_cols:
             st.error(f"Missing required columns: {missing_cols}")
@@ -80,7 +80,7 @@ def create_map(filtered_data):
 
 def main():
     st.title("🗺️ Netherlands Protests Heatmap")
-    st.markdown("Heatmap showing protest density across the Netherlands")
+    st.markdown("Heatmap showing protest density across the Netherlands, 2020-2024 (Data source: ACLED)")
     
     # Load data
     with st.spinner("Loading protest data..."):
@@ -90,32 +90,40 @@ def main():
         return
     
     # === Sidebar filters ===
-    # 1. Year checkboxes
-    st.sidebar.header("Year Filter")
-    available_years = sorted(df['year'].unique())
-    selected_years = []
-    for year in range(2020, 2025):
-        if year in available_years:
-            if st.sidebar.checkbox(str(year), value=True, key=f"year_{year}"):
-                selected_years.append(year)
-        else:
-            st.sidebar.checkbox(f"{year} (no data)", value=False, disabled=True, key=f"year_{year}_nodata")
+    # 1. Year filter - collapsible
+    with st.sidebar.expander("📅 Year Filter", expanded=True):
+        available_years = sorted(df['year'].unique())
+        selected_years = []
+        for year in range(2020, 2025):
+            if year in available_years:
+                if st.checkbox(str(year), value=True, key=f"year_{year}"):
+                    selected_years.append(year)
+            else:
+                st.checkbox(f"{year} (no data)", value=False, disabled=True, key=f"year_{year}_nodata")
     
-    # 2. Event Type checkboxes
-    st.sidebar.header("Event Type Filter")
-    event_types = sorted(df['event_type'].unique())
-    selected_event_types = []
-    for et in event_types:
-        if st.sidebar.checkbox(et, value=True, key=f"event_type_{et}"):
-            selected_event_types.append(et)
+    # 2. Event Type filter - collapsible
+    with st.sidebar.expander("🏛️ Event Type Filter", expanded=True):
+        event_types = sorted(df['event_type'].unique())
+        selected_event_types = []
+        for et in event_types:
+            if st.checkbox(et, value=True, key=f"event_type_{et}"):
+                selected_event_types.append(et)
     
-    # 3. Province checkboxes
-    st.sidebar.header("Province Filter")
-    provinces = sorted(df['province'].unique())
-    selected_provinces = []
-    for prov in provinces:
-        if st.sidebar.checkbox(prov, value=True, key=f"province_{prov}"):
-            selected_provinces.append(prov)
+    # 3. Province filter - collapsible
+    with st.sidebar.expander("📍 Province Filter", expanded=True):
+        provinces = sorted(df['province'].unique())
+        selected_provinces = []
+        for prov in provinces:
+            if st.checkbox(prov, value=True, key=f"province_{prov}"):
+                selected_provinces.append(prov)
+    
+    # 4. Clusters filter - collapsible
+    with st.sidebar.expander("🏷️ Theme/Cluster Filter", expanded=True):
+        clusters = sorted(df['cluster_theme'].unique())
+        selected_clusters = []
+        for cluster in clusters:
+            if st.checkbox(cluster, value=True, key=f"cluster_{cluster}"):
+                selected_clusters.append(cluster)
     
     # Show total available (before filtering)
     st.sidebar.write(f"**Total Protests:** {len(df)}")
@@ -139,8 +147,14 @@ def main():
     else:
         filtered_df = filtered_df.iloc[0:0]
     
+    # Then clusters
+    if selected_clusters:
+        filtered_df = filtered_df[filtered_df['cluster_theme'].isin(selected_clusters)]
+    else:
+        filtered_df = filtered_df.iloc[0:0]
+    
     # === Summary metrics ===
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("Protests in Selection", len(filtered_df))
     with col2:
@@ -151,6 +165,8 @@ def main():
             st.metric("Avg. Protests/Year", f"{avg_per_year:.0f}")
         else:
             st.metric("Avg. Protests/Year", "0")
+    with col4:
+        st.metric("Themes Selected", len(selected_clusters))
     
     # === Map ===
     if not filtered_df.empty:
@@ -164,7 +180,7 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown(
-        "*Use the sidebar to filter protests by year, event type, and province. "
+        "*Use the sidebar to filter protests by year, event type, province, and theme. "
         "The heatmap intensity shows areas with higher concentrations of protests.*"
     )
 
