@@ -53,3 +53,10 @@ Raw data is cleaned in `src/data_clean.py` by:
   ```bash
   streamlit run src/app.py
   ```
+- Example screenshots of the interactive app:
+
+**All Protests**
+![All protests](streamlit_app/screenshots/all_protests.png)
+
+**Corona Protests in Noord Brabant**
+![Corona Protests in Noord Brabant](streamlit_app/screenshots/corona_protests_noord_brabant.png)
