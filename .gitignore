@@ -1,6 +1,7 @@
 # Ignore large/raw data
 data/raw/
 data/interim/
+data/processed/
 
 # Ignore cache and environment files
 __pycache__/

@@ -183,6 +183,9 @@ def main():
         "*Use the sidebar to filter protests by year, event type, province, and theme. "
         "The heatmap intensity shows areas with higher concentrations of protests.*"
     )
+    st.markdown(
+        "*Note: Protest themes have been categorized using sentence transformers, which can result in inaccuracies.*"
+    )
 
 if __name__ == "__main__":
     main()
