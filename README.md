@@ -56,7 +56,7 @@ Raw data is cleaned in `src/data_clean.py` by:
 - Example screenshots of the interactive app:
 
 **All Protests**
-![All protests](streamlit_app/screenshots/all_protests.png)
+![All protests](streamlit_app/screenshots/all_protests.PNG)
 
 **Corona Protests in Noord Brabant**
-![Corona Protests in Noord Brabant](streamlit_app/screenshots/corona_protests_noord_brabant.png)
+![Corona Protests in Noord Brabant](streamlit_app/screenshots/corona_protests_noord_brabant.PNG)
