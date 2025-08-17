@@ -1,4 +1,4 @@
-# dutch_protest_mapper
+# Dutch Protest Mapper
 A data science project visualizing open-source data from ACLED relating to protests in the Netherlands 2020–2024.
 
 # Data Acquisition
